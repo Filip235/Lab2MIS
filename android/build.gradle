@@ -1,18 +1,40 @@
-allprojects {
+buildscript {
     repositories {
-        google()
-        mavenCentral()
+        google()  // Google's Maven repository
+        mavenCentral()  // Maven Central repository for dependencies
+    }
+    dependencies {
+
+        classpath 'com.android.tools.build:gradle:8.2.2'
+        classpath 'com.google.gms:google-services:4.4.2'
     }
 }
 
-rootProject.buildDir = "../build"
-subprojects {
-    project.buildDir = "${rootProject.buildDir}/${project.name}"
-}
-subprojects {
-    project.evaluationDependsOn(":app")
+allprojects {
+    repositories {
+        google()  // Ensure all projects can access Google's Maven repository
+        mavenCentral()  // Maven Central repository for all dependencies
+    }
 }
 
 tasks.register("clean", Delete) {
-    delete rootProject.buildDir
+    delete rootProject.buildDir  // Clean build directory
+}
+
+subprojects {
+    afterEvaluate { project ->
+        if (project.hasProperty("android")) {
+            project.android {
+                compileSdkVersion 34 // Ensure compileSdkVersion is correctly set
+                defaultConfig {
+                    targetSdkVersion 33
+                    minSdkVersion 21
+                }
+                compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_11
+                    targetCompatibility JavaVersion.VERSION_11
+                }
+            }
+        }
+    }
 }

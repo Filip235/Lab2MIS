@@ -2,9 +2,17 @@ import 'package:flutter/material.dart';
 
 class JokeCard extends StatelessWidget {
   final String title;
+  final bool isFavorite;
   final VoidCallback onTap;
+  final VoidCallback onFavoritePressed;
 
-  const JokeCard({Key? key, required this.title, required this.onTap}) : super(key: key);
+  const JokeCard({
+    Key? key,
+    required this.title,
+    required this.onTap,
+    required this.isFavorite,
+    required this.onFavoritePressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,6 +21,13 @@ class JokeCard extends StatelessWidget {
       child: ListTile(
         title: Text(title),
         onTap: onTap,
+        trailing: IconButton(
+          icon: Icon(
+            isFavorite ? Icons.favorite : Icons.favorite_border,
+            color: isFavorite ? Colors.red : Colors.grey,
+          ),
+          onPressed: onFavoritePressed,
+        ),
       ),
     );
   }
